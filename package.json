@@ -1,6 +1,7 @@
 {
-  "name": "my-nextjs-app",
+  "name": "apollo247-internship-assignment",
   "version": "0.1.0",
+  "description": "Assignment project for Apollo247 internship opportunity",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
