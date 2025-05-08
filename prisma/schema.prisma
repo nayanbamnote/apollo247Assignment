@@ -13,21 +13,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String  @id @default(cuid())
-  name     String?
-  email    String  @unique
-  password String
-  posts    Post[]
+
+//––– Enums for your filterable fields –––––––––––––––––––––––––––
+enum ConsultMode {
+  PHYSICAL
+  ONLINE
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String?
-  author    User?    @relation(fields: [authorId], references: [id])
+enum Language {
+  ENGLISH
+  HINDI
+  TELUGU
+}
+
+enum Facility {
+  APOLLO_HOSPITAL
+  OTHER_CLINICS
+}
+
+//––– The Doctor model ––––––––––––––––––––––––––––––––––––––––––
+model Doctor {
+  id                Int            @id @default(autoincrement())
+  name              String
+  profileImageUrl   String         // URL to the doctor’s photo
+  degrees           String         // e.g. "MBBS, DNB General Medicine"
+  specialization    String         // e.g. "General Physician / Internal Medicine"
+  experienceYears   Int            // e.g. 6
+  consultationFee   Int            // in ₹, e.g. 200
+  noBookingFees     Boolean        @default(true)
+  location          String         // e.g. "Coimbatore"
+  clinicName        String         // e.g. "Medcare Clinics, Coimbatore"
+  availableAt       DateTime?      // if you want to store next‐available slot
+  rating            Float          @default(0.0)   // e.g. 4.5
+  patientsTreated   Int            @default(0)     // e.g. 1200
+
+  //––– filter fields ––––––––––––––––––––––––––––––––––––––––––––
+  modesOfConsult    ConsultMode[]  @default([PHYSICAL, ONLINE])
+  languages         Language[]     @default([ENGLISH])
+  facilities        Facility[]     @default([])
+
+  @@map("doctors")
 }

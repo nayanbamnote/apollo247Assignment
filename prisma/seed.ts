@@ -4,148 +4,178 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create 5 users with hashed passwords
-  const users = await Promise.all([
-    prisma.user.create({
-      data: {
-        email: 'alice@example.com',
-        name: 'Alice',
-        password: await bcrypt.hash('password123', 10),
-      },
-    }),
-    prisma.user.create({
-      data: {
-        email: 'bob@example.com',
-        name: 'Bob',
-        password: await bcrypt.hash('password123', 10),
-      },
-    }),
-    prisma.user.create({
-      data: {
-        email: 'charlie@example.com',
-        name: 'Charlie',
-        password: await bcrypt.hash('password123', 10),
-      },
-    }),
-    prisma.user.create({
-      data: {
-        email: 'diana@example.com',
-        name: 'Diana',
-        password: await bcrypt.hash('password123', 10),
-      },
-    }),
-    prisma.user.create({
-      data: {
-        email: 'edward@example.com',
-        name: 'Edward',
-        password: await bcrypt.hash('password123', 10),
-      },
-    }),
-  ]);
-
-  const userIdMapping = {
-    alice: users[0].id,
-    bob: users[1].id,
-    charlie: users[2].id,
-    diana: users[3].id,
-    edward: users[4].id,
-  };
-
-  // Create 15 posts distributed among users
-  await prisma.post.createMany({
+  // Create 10 dummy doctors
+  await prisma.doctor.createMany({
     data: [
-      // Alice's posts
-      { 
-        title: 'Getting Started with TypeScript and Prisma', 
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce id erat a lorem tincidunt ultricies. Vivamus porta bibendum nulla vel accumsan.', 
-        published: true, 
-        authorId: userIdMapping.alice 
+      {
+        name: 'Dr. Alice Smith',
+        profileImageUrl: 'https://randomuser.me/api/portraits/women/1.jpg',
+        degrees: 'MBBS, MD',
+        specialization: 'Cardiologist',
+        experienceYears: 10,
+        consultationFee: 500,
+        noBookingFees: true,
+        location: 'Mumbai',
+        clinicName: 'Heart Care Clinic',
+        availableAt: new Date('2024-07-01T10:00:00Z'),
+        rating: 4.7,
+        patientsTreated: 1500,
+        modesOfConsult: ['PHYSICAL', 'ONLINE'],
+        languages: ['ENGLISH', 'HINDI'],
+        facilities: ['APOLLO_HOSPITAL'],
       },
-      { 
-        title: 'How ORMs Simplify Complex Queries', 
-        content: 'Duis sagittis urna ut sapien tristique convallis. Aenean vel ligula felis. Phasellus bibendum sem at elit dictum volutpat.', 
-        published: false, 
-        authorId: userIdMapping.alice 
+      {
+        name: 'Dr. Bob Johnson',
+        profileImageUrl: 'https://randomuser.me/api/portraits/men/2.jpg',
+        degrees: 'MBBS, DNB General Medicine',
+        specialization: 'General Physician',
+        experienceYears: 8,
+        consultationFee: 300,
+        noBookingFees: false,
+        location: 'Delhi',
+        clinicName: 'City Health Clinic',
+        availableAt: new Date('2024-07-02T11:00:00Z'),
+        rating: 4.3,
+        patientsTreated: 1200,
+        modesOfConsult: ['PHYSICAL'],
+        languages: ['ENGLISH'],
+        facilities: ['OTHER_CLINICS'],
       },
-
-      // Bob's posts
-      { 
-        title: 'Mastering Prisma: Efficient Database Migrations', 
-        content: 'Ut ullamcorper nec erat id auctor. Nullam nec ligula in ex feugiat tincidunt. Cras accumsan vehicula tortor ut eleifend.', 
-        published: true, 
-        authorId: userIdMapping.bob 
+      {
+        name: 'Dr. Charlie Lee',
+        profileImageUrl: 'https://randomuser.me/api/portraits/men/3.jpg',
+        degrees: 'MBBS, MS',
+        specialization: 'Orthopedic Surgeon',
+        experienceYears: 12,
+        consultationFee: 700,
+        noBookingFees: true,
+        location: 'Bangalore',
+        clinicName: 'Ortho Plus',
+        availableAt: new Date('2024-07-03T09:30:00Z'),
+        rating: 4.8,
+        patientsTreated: 2000,
+        modesOfConsult: ['ONLINE'],
+        languages: ['ENGLISH', 'TELUGU'],
+        facilities: ['APOLLO_HOSPITAL'],
       },
-      { 
-        title: 'Best Practices for Type Safety in ORMs', 
-        content: 'Aliquam erat volutpat. Suspendisse potenti. Maecenas fringilla elit vel eros laoreet, et tempor sapien vulputate.', 
-        published: true, 
-        authorId: userIdMapping.bob 
+      {
+        name: 'Dr. Diana Patel',
+        profileImageUrl: 'https://randomuser.me/api/portraits/women/4.jpg',
+        degrees: 'MBBS, DGO',
+        specialization: 'Gynecologist',
+        experienceYears: 9,
+        consultationFee: 400,
+        noBookingFees: false,
+        location: 'Hyderabad',
+        clinicName: 'Women Care Center',
+        availableAt: new Date('2024-07-04T14:00:00Z'),
+        rating: 4.6,
+        patientsTreated: 1300,
+        modesOfConsult: ['PHYSICAL', 'ONLINE'],
+        languages: ['ENGLISH', 'HINDI', 'TELUGU'],
+        facilities: ['OTHER_CLINICS'],
       },
-      { 
-        title: 'TypeScript Utility Types for Database Models', 
-        content: 'Donec ac magna facilisis, vestibulum ligula at, elementum nisl. Morbi volutpat eget velit eu egestas.', 
-        published: false, 
-        authorId: userIdMapping.bob 
+      {
+        name: 'Dr. Edward Kim',
+        profileImageUrl: 'https://randomuser.me/api/portraits/men/5.jpg',
+        degrees: 'MBBS, DM',
+        specialization: 'Neurologist',
+        experienceYears: 15,
+        consultationFee: 800,
+        noBookingFees: true,
+        location: 'Chennai',
+        clinicName: 'Neuro Clinic',
+        availableAt: new Date('2024-07-05T16:00:00Z'),
+        rating: 4.9,
+        patientsTreated: 2500,
+        modesOfConsult: ['PHYSICAL'],
+        languages: ['ENGLISH'],
+        facilities: ['APOLLO_HOSPITAL'],
       },
-
-      // Charlie's posts (no posts for Charlie)
-
-      // Diana's posts
-      { 
-        title: 'Exploring Database Indexes and Their Performance Impact', 
-        content: 'Vivamus ac velit tincidunt, sollicitudin erat quis, fringilla enim. Aenean posuere est a risus placerat suscipit.', 
-        published: true, 
-        authorId: userIdMapping.diana 
+      {
+        name: 'Dr. Fiona Dsouza',
+        profileImageUrl: 'https://randomuser.me/api/portraits/women/6.jpg',
+        degrees: 'MBBS, MS',
+        specialization: 'ENT Specialist',
+        experienceYears: 7,
+        consultationFee: 350,
+        noBookingFees: false,
+        location: 'Pune',
+        clinicName: 'Ear Nose Throat Clinic',
+        availableAt: new Date('2024-07-06T12:00:00Z'),
+        rating: 4.2,
+        patientsTreated: 900,
+        modesOfConsult: ['ONLINE'],
+        languages: ['ENGLISH', 'HINDI'],
+        facilities: ['OTHER_CLINICS'],
       },
-      { 
-        title: 'Choosing the Right Database for Your TypeScript Project', 
-        content: 'Sed vel suscipit lorem. Duis et arcu consequat, sagittis justo quis, pellentesque risus. Curabitur sed consequat est.', 
-        published: false, 
-        authorId: userIdMapping.diana 
+      {
+        name: 'Dr. George Thomas',
+        profileImageUrl: 'https://randomuser.me/api/portraits/men/7.jpg',
+        degrees: 'MBBS, MD',
+        specialization: 'Dermatologist',
+        experienceYears: 11,
+        consultationFee: 600,
+        noBookingFees: true,
+        location: 'Kolkata',
+        clinicName: 'Skin Care Clinic',
+        availableAt: new Date('2024-07-07T15:00:00Z'),
+        rating: 4.5,
+        patientsTreated: 1700,
+        modesOfConsult: ['PHYSICAL', 'ONLINE'],
+        languages: ['ENGLISH'],
+        facilities: ['APOLLO_HOSPITAL'],
       },
-      { 
-        title: 'Designing Scalable Schemas with Prisma', 
-        content: 'Phasellus ut erat nec elit ultricies egestas. Vestibulum rhoncus urna eget magna varius pharetra.', 
-        published: true, 
-        authorId: userIdMapping.diana 
+      {
+        name: 'Dr. Hannah Mehra',
+        profileImageUrl: 'https://randomuser.me/api/portraits/women/8.jpg',
+        degrees: 'MBBS, DNB',
+        specialization: 'Pediatrician',
+        experienceYears: 6,
+        consultationFee: 450,
+        noBookingFees: false,
+        location: 'Ahmedabad',
+        clinicName: 'Child Health Clinic',
+        availableAt: new Date('2024-07-08T13:00:00Z'),
+        rating: 4.4,
+        patientsTreated: 1100,
+        modesOfConsult: ['PHYSICAL'],
+        languages: ['ENGLISH', 'HINDI'],
+        facilities: ['OTHER_CLINICS'],
       },
-      { 
-        title: 'Handling Relations Between Models in ORMs', 
-        content: 'Integer luctus ac augue at tristique. Curabitur varius nisl vitae mi fringilla, vel tincidunt nunc dictum.', 
-        published: false, 
-        authorId: userIdMapping.diana 
+      {
+        name: 'Dr. Ian Kapoor',
+        profileImageUrl: 'https://randomuser.me/api/portraits/men/9.jpg',
+        degrees: 'MBBS, MS',
+        specialization: 'Ophthalmologist',
+        experienceYears: 13,
+        consultationFee: 550,
+        noBookingFees: true,
+        location: 'Coimbatore',
+        clinicName: 'Vision Care',
+        availableAt: new Date('2024-07-09T10:30:00Z'),
+        rating: 4.6,
+        patientsTreated: 1800,
+        modesOfConsult: ['ONLINE'],
+        languages: ['ENGLISH', 'TELUGU'],
+        facilities: ['APOLLO_HOSPITAL'],
       },
-
-      // Edward's posts
-      { 
-        title: 'Why TypeORM Still Has Its Place in 2025', 
-        content: 'Morbi non arcu nec velit cursus feugiat sit amet sit amet mi. Etiam porttitor ligula id sem molestie, in tempor arcu bibendum.', 
-        published: true, 
-        authorId: userIdMapping.edward 
-      },
-      { 
-        title: 'NoSQL vs SQL: The Definitive Guide for Developers', 
-        content: 'Suspendisse a ligula sit amet risus ullamcorper tincidunt. Curabitur tincidunt, sapien id fringilla auctor, risus libero gravida odio, nec volutpat libero orci nec lorem.', 
-        published: true, 
-        authorId: userIdMapping.edward 
-      },
-      { 
-        title: 'Optimizing Queries with Prisma\'s Select and Include', 
-        content: 'Proin vel diam vel nisi facilisis malesuada. Sed vitae diam nec magna mollis commodo a vitae nunc.', 
-        published: false, 
-        authorId: userIdMapping.edward 
-      },
-      { 
-        title: 'PostgreSQL Optimizations Every Developer Should Know', 
-        content: 'Nullam mollis quam sit amet lacus interdum, at suscipit libero pellentesque. Suspendisse in mi vitae magna finibus pretium.', 
-        published: true, 
-        authorId: userIdMapping.edward 
-      },
-      { 
-        title: 'Scaling Applications with Partitioned Tables in PostgreSQL', 
-        content: 'Cras vitae tortor in mauris tristique elementum non id ipsum. Nunc vitae pulvinar purus.', 
-        published: true, 
-        authorId: userIdMapping.edward 
+      {
+        name: 'Dr. Julia Rao',
+        profileImageUrl: 'https://randomuser.me/api/portraits/women/10.jpg',
+        degrees: 'MBBS, MD',
+        specialization: 'Psychiatrist',
+        experienceYears: 9,
+        consultationFee: 650,
+        noBookingFees: false,
+        location: 'Lucknow',
+        clinicName: 'Mind Wellness Center',
+        availableAt: new Date('2024-07-10T17:00:00Z'),
+        rating: 4.7,
+        patientsTreated: 1400,
+        modesOfConsult: ['PHYSICAL', 'ONLINE'],
+        languages: ['ENGLISH', 'HINDI'],
+        facilities: ['OTHER_CLINICS'],
       },
     ],
   });
